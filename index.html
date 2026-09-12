@@ -250,6 +250,7 @@
   }
   .fields input:focus{border-color:var(--teal)}
   .opt-tag{color:var(--teal)}
+  .fields .lbl{display:block}
   .consent{
     display:flex;
     gap:10px;
@@ -333,7 +334,7 @@
         <label>Nome<input type="text" id="f_nome" autocomplete="name"></label>
         <label>Empresa<input type="text" id="f_empresa" autocomplete="organization"></label>
         <label>E-mail<input type="email" id="f_email" autocomplete="email"></label>
-        <label>WhatsApp <span class="opt-tag">opcional</span><input type="tel" id="f_fone" autocomplete="tel"></label>
+        <label><span class="lbl">WhatsApp <span class="opt-tag">opcional</span></span><input type="tel" id="f_fone" autocomplete="tel"></label>
       </div>
 
       <label class="consent"><input type="checkbox" id="f_ok"> Autorizo a A³ Dados a guardar esses dados e entrar em contato comigo sobre este resultado.</label>
