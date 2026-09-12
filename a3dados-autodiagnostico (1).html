@@ -1,0 +1,495 @@
+<!--
+  A³ Dados — Autodiagnóstico de Maturidade de Dados
+  Arquivo único. Pode ser hospedado em qualquer lugar (domínio próprio, GitHub Pages, Vercel).
+
+  ANTES DE PUBLICAR, trocar em dois lugares no fim do arquivo:
+    1. INSTAGRAM -> o @ do perfil, sem arroba. Ex.: a3dados
+    2. EMAIL     -> a3dadosmkt@gmail.com
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autodiagnóstico de Maturidade de Dados · A³ Dados</title>
+<meta name="description" content="Dez perguntas para descobrir em que nível a sua empresa está no uso de dados, e o que fazer a seguir.">
+
+<!-- Prévia do link em WhatsApp, LinkedIn, Instagram e Facebook.
+     Trocar o endereço nas 3 linhas abaixo quando o domínio próprio estiver no ar. -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://a3dados.github.io/diagnostico">
+<meta property="og:title" content="Em que nível de dados a sua empresa está?">
+<meta property="og:description" content="Dez perguntas, três minutos, sem termo técnico. No fim você recebe o nível da sua empresa e os três primeiros passos.">
+<meta property="og:image" content="https://a3dados.github.io/diagnostico/a3dados-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A³ Dados — autodiagnóstico de maturidade de dados">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="A³ Dados">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#062F5B;
+    --teal:#12B7B2;
+    --white:#FFFFFF;
+    --mist:#E6E9EE;
+    --ink:#0B2138;
+    --muted:#5B6B7C;
+    --display:"Familjen Grotesk", "Archivo", system-ui, sans-serif;
+    --body:"Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--white);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (max-width:520px){ body{font-size:16px} }
+
+  .wrap{
+    max-width:680px;
+    margin:0 auto;
+    padding:28px 22px 64px;
+  }
+
+  /* ---------- topo ---------- */
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    padding-bottom:22px;
+    border-bottom:1px solid var(--mist);
+  }
+  .brand b{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:19px;
+    letter-spacing:-.015em;
+    color:var(--navy);
+  }
+  .brand span{font-size:14px;color:var(--muted)}
+
+  /* ---------- abertura ---------- */
+  .hero{padding:54px 0 0}
+  .hero h1{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(30px,6.4vw,46px);
+    line-height:1.08;
+    letter-spacing:-.03em;
+    color:var(--navy);
+    margin:0 0 22px;
+    max-width:16ch;
+  }
+  .hero p{
+    margin:0 0 16px;
+    max-width:56ch;
+    color:var(--muted);
+  }
+  .hero .lead{color:var(--ink)}
+
+  .meta{
+    margin:30px 0 0;
+    padding:16px 18px;
+    background:var(--mist);
+    border-left:3px solid var(--teal);
+    font-size:15px;
+    color:var(--muted);
+  }
+
+  /* ---------- botões ---------- */
+  button{font:inherit;cursor:pointer}
+  .go{
+    margin-top:30px;
+    background:var(--navy);
+    color:var(--white);
+    border:0;
+    border-radius:4px;
+    padding:15px 30px;
+    font-weight:600;
+    font-size:17px;
+  }
+  .go:hover{background:#0a4079}
+  .ghost{
+    background:none;
+    border:1px solid var(--mist);
+    border-radius:4px;
+    padding:12px 20px;
+    color:var(--muted);
+    font-weight:500;
+  }
+  .ghost:hover{border-color:var(--navy);color:var(--navy)}
+  :focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+
+  /* ---------- perguntas ---------- */
+  .bar{height:2px;background:var(--mist);margin:34px 0 0}
+  .bar i{display:block;height:2px;background:var(--teal);width:0;transition:width .35s ease}
+  .count{
+    margin:14px 0 26px;
+    font-size:14px;
+    color:var(--muted);
+    font-variant-numeric:tabular-nums;
+  }
+  .q{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(23px,4.6vw,30px);
+    line-height:1.2;
+    letter-spacing:-.02em;
+    color:var(--navy);
+    margin:0 0 26px;
+    max-width:26ch;
+  }
+  .opts{display:flex;flex-direction:column;gap:10px;margin-bottom:30px}
+  .opt{
+    text-align:left;
+    background:var(--white);
+    border:1px solid var(--mist);
+    border-radius:4px;
+    padding:16px 18px;
+    line-height:1.4;
+    color:var(--ink);
+    transition:border-color .12s,background .12s;
+  }
+  .opt:hover{border-color:var(--teal);background:#f7fcfc}
+  .nav{display:flex;gap:12px;align-items:center}
+
+  /* ---------- resultado ---------- */
+  .scale{display:flex;gap:4px;margin:8px 0 26px}
+  .scale div{
+    flex:1;
+    height:7px;
+    background:var(--mist);
+    border-radius:2px;
+    transform-origin:left;
+  }
+  .scale div.on{background:var(--teal)}
+  .scale div.here{background:var(--navy)}
+
+  .level{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(28px,5.6vw,40px);
+    line-height:1.1;
+    letter-spacing:-.028em;
+    color:var(--navy);
+    margin:0 0 6px;
+  }
+  .tier{font-size:15px;color:var(--muted);margin:0 0 26px;font-variant-numeric:tabular-nums}
+  .read{max-width:58ch;margin:0 0 30px}
+  .read p{margin:0 0 14px}
+
+  h2{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:19px;
+    letter-spacing:-.01em;
+    color:var(--navy);
+    margin:0 0 14px;
+  }
+  ol.acts{margin:0 0 34px;padding-left:1.15em;max-width:56ch}
+  ol.acts li{margin-bottom:12px;padding-left:4px}
+  ol.acts li::marker{color:var(--teal);font-weight:600}
+
+  .cta{
+    border-top:1px solid var(--mist);
+    padding-top:28px;
+  }
+  .cta p{margin:0 0 20px;max-width:54ch;color:var(--muted)}
+  .cta a{
+    display:inline-block;
+    background:var(--teal);
+    color:#04262a;
+    text-decoration:none;
+    border-radius:4px;
+    padding:15px 28px;
+    font-weight:600;
+  }
+  .cta a:hover{background:#0fa5a0}
+  .cta .alt.copied{color:var(--teal)}
+  @media (max-width:520px){
+    .cta a{display:block;width:100%;text-align:center}
+    .cta .alt a{display:inline;width:auto}
+  }
+  .cta .alt{
+    display:block;
+    margin-top:18px;
+    font-size:15px;
+    color:var(--muted);
+    background:none;
+    padding:0;
+    font-weight:400;
+  }
+  .cta .alt a{background:none;color:var(--navy);padding:0;font-weight:500;text-decoration:underline}
+
+  .foot{margin-top:40px;font-size:14px;color:var(--muted)}
+  .hide{display:none}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <b>A³ Dados</b>
+    <span>Autodiagnóstico de maturidade</span>
+  </div>
+
+  <!-- ABERTURA -->
+  <section id="start" class="hero">
+    <h1>Quando você precisa de um número, o que você faz?</h1>
+    <p class="lead">A resposta a essa pergunta diz mais sobre a sua empresa do que qualquer sistema que ela tenha comprado.</p>
+    <p>São dez perguntas sobre o dia a dia, sem termo técnico. No fim você recebe o nível de maturidade da sua empresa e os três primeiros passos para sair dele.</p>
+    <div class="meta">Leva cerca de três minutos. Nada é enviado para ninguém: o resultado aparece na tela e você decide o que fazer com ele.</div>
+    <button class="go" id="begin">Começar o diagnóstico</button>
+  </section>
+
+  <!-- PERGUNTAS -->
+  <section id="quiz" class="hide">
+    <div class="bar"><i id="fill"></i></div>
+    <p class="count" id="count"></p>
+    <h1 class="q" id="question"></h1>
+    <div class="opts" id="options"></div>
+    <div class="nav">
+      <button class="ghost" id="back">Voltar</button>
+    </div>
+  </section>
+
+  <!-- RESULTADO -->
+  <section id="result" class="hide">
+    <div class="scale" id="scale"><div></div><div></div><div></div><div></div></div>
+    <h1 class="level" id="levelName"></h1>
+    <p class="tier" id="levelTier"></p>
+    <div class="read" id="levelRead"></div>
+
+    <h2>Os três primeiros passos</h2>
+    <ol class="acts" id="levelActs"></ol>
+
+    <div class="cta">
+      <p>Este resultado é indicativo. Um diagnóstico real olha os seus sistemas, ouve as suas pessoas e devolve um plano de 90 dias com esforço e impacto de cada item.</p>
+      <a id="dm" href="#" target="_blank" rel="noopener">Abrir conversa no Instagram</a>
+      <span class="alt" id="hint">Ao abrir, o seu resultado vai estar copiado. É só colar na conversa. Prefere e-mail? Escreva para <a id="mail" href="#">a3dadosmkt@gmail.com</a>.</span>
+    </div>
+
+    <p class="foot"><button class="ghost" id="again">Refazer o diagnóstico</button></p>
+  </section>
+
+</div>
+
+<script>
+/* ====== TROCAR ANTES DE PUBLICAR ====== */
+const INSTAGRAM = "a3dados";                   // o @ do perfil, sem arroba
+const EMAIL     = "a3dadosmkt@gmail.com";
+/* ====================================== */
+
+const QUESTIONS = [
+  { q:"Quando você precisa de um número da empresa, o que acontece?",
+    a:[["Alguém monta uma planilha e isso leva dias",0],
+       ["Peço para a pessoa que sabe onde a informação está",1],
+       ["Tiro de um relatório do sistema, mas confiro antes de usar",2],
+       ["Abro um painel e o número já está lá",3]] },
+
+  { q:"A empresa tem sistema implantado, como ERP ou CRM?", key:"sistema",
+    a:[["Não temos, ou usamos só emissor de nota",0],
+       ["Temos, mas quase ninguém usa o que ele oferece",0],
+       ["Temos e usamos as rotinas principais",2],
+       ["Temos, usamos e tiramos dele informação para decidir",3]] },
+
+  { q:"Quem registra a informação no dia a dia?",
+    a:[["Cada um do seu jeito, quando lembra",0],
+       ["Algumas áreas registram, outras não",1],
+       ["Todos registram, seguindo regras combinadas",2],
+       ["Todos registram e alguém confere a qualidade",3]] },
+
+  { q:"A empresa acompanha indicadores com frequência fixa?",
+    a:[["Não temos indicadores definidos",0],
+       ["Olhamos faturamento e pouco mais",1],
+       ["Temos um conjunto e olhamos todo mês",2],
+       ["Temos por área, com meta e responsável",3]] },
+
+  { q:"Se duas áreas pedirem o mesmo número, os valores batem?",
+    a:[["Quase nunca, e vira discussão",0],
+       ["Às vezes, depende de quem montou",1],
+       ["Batem, depois de um ajuste ou outro",2],
+       ["Batem, porque a origem é a mesma",3]] },
+
+  { q:"Quanto tempo leva para fechar o relatório do mês?",
+    a:[["Não temos relatório mensal",0],
+       ["Mais de uma semana de trabalho de alguém",1],
+       ["Um ou dois dias",2],
+       ["É automático, ou quase",3]] },
+
+  { q:"Se a pessoa que monta os números sair de férias, o que acontece?",
+    a:[["Para tudo",0],
+       ["Atrasa bastante e sai pior",1],
+       ["Outra pessoa consegue, com esforço",2],
+       ["Nada muda, porque não depende dela",3]] },
+
+  { q:"Onde mora a informação que sustenta as decisões?",
+    a:[["Na cabeça das pessoas",0],
+       ["Em planilhas pessoais, cada uma com um dono",1],
+       ["Nos sistemas, mas exportada para planilha na hora de usar",2],
+       ["Em um lugar só, acessado direto",3]] },
+
+  { q:"Os números contam o passado ou ajudam a antecipar?",
+    a:[["Não usamos números para isso",0],
+       ["Olhamos o passado, quando sobra tempo",1],
+       ["Acompanhamos o mês corrente e reagimos",2],
+       ["Projetamos cenários e agimos antes do problema",3]] },
+
+  { q:"Já aconteceu de uma decisão importante ficar parada por falta de informação?",
+    a:[["Sim, e acontece com frequência",0],
+       ["Já aconteceu algumas vezes",1],
+       ["Raramente",2],
+       ["Não, temos o que precisamos na hora",3]] }
+];
+
+const LEVELS = {
+  ausencia:{
+    tier:1,
+    name:"Nível 1 · Caos por ausência",
+    read:["A informação da sua empresa existe, mas não está registrada em lugar nenhum. Ela mora na memória das pessoas e em conversas, e some quando alguém falta ou sai.",
+          "Isso não é falta de competência, é falta de combinado. E é caro de um jeito invisível: cada decisão custa horas de garimpo, e algumas decisões simplesmente não são tomadas."],
+    acts:["Escolha as três decisões que mais doem hoje e escreva, para cada uma, qual informação a sustentaria.",
+          "Registre essas três informações em um lugar só, com um responsável nomeado. Planilha serve.",
+          "Só depois disso pense em comprar sistema. Ferramenta sem combinado vira mais um lugar vazio."]
+  },
+  abandono:{
+    tier:1,
+    name:"Nível 1 · Caos por abandono",
+    read:["A sua empresa já comprou o que precisava e não está usando. O sistema está lá, provavelmente entregando uma fração do que foi contratado, enquanto as decisões continuam saindo de planilha paralela.",
+          "Este é o achado mais comum e o mais caro, porque o dinheiro já foi gasto. Na prática, você paga duas vezes: a licença e o retrabalho."],
+    acts:["Levante o que o sistema já faz e ninguém usa. Peça essa lista ao fornecedor, ela costuma surpreender.",
+          "Defina quem alimenta o quê, com que frequência, e torne isso parte do trabalho, não um favor.",
+          "Ligue uma rotina de leitura mensal usando o que já está pago, antes de contratar qualquer coisa nova."]
+  },
+  2:{
+    tier:2,
+    name:"Nível 2 · Planilha e memória",
+    read:["A informação existe e é usada, mas mora em planilhas pessoais. Funciona, e funciona bem o suficiente para ninguém mexer.",
+          "O problema aparece em três momentos: quando a pessoa que monta a planilha falta, quando dois setores apresentam números diferentes na mesma reunião, e quando a empresa cresce e o volume não cabe mais no método."],
+    acts:["Eleja a fonte oficial de cada número importante. Um número, um lugar, um dono.",
+          "Escolha cinco indicadores e escreva como cada um é calculado, em uma frase que qualquer pessoa entenda.",
+          "Transfira uma planilha crítica para um lugar compartilhado com acesso controlado, como piloto."]
+  },
+  3:{
+    tier:3,
+    name:"Nível 3 · Organizado, mas olhando para trás",
+    read:["Os seus números são confiáveis e chegam em tempo razoável. Isso já coloca a empresa à frente da maioria.",
+          "O limite agora é outro: a informação conta o que já aconteceu. Você corrige depois do fato, quando o custo já foi pago. O ganho seguinte não vem de mais relatório, vem de antecedência e de tirar a mão humana do meio do caminho."],
+    acts:["Liste o que ainda é montado à mão todo mês e automatize o mais demorado deles.",
+          "Ligue cada indicador a uma meta e a um responsável, com uma frequência de leitura definida.",
+          "Comece a olhar tendência e comparação com o mesmo período anterior, não só o valor do mês."]
+  },
+  4:{
+    tier:4,
+    name:"Nível 4 · Decisão sustentada por dado",
+    read:["Poucas empresas desse porte chegam aqui. Os números são confiáveis, chegam sozinhos e participam da decisão antes dela ser tomada.",
+          "O próximo passo deixa de ser organização e passa a ser previsão, alerta automático e uso de informação de fora da empresa. Também vale um cuidado que é raro nesse nível: revisar se os indicadores acompanhados ainda são os que importam."],
+    acts:["Crie alertas que avisem quando um indicador sair da faixa esperada, sem depender de alguém olhar.",
+          "Construa uma previsão simples para as duas ou três variáveis que mais mexem no resultado.",
+          "Revise o conjunto de indicadores uma vez por ano e aposente os que ninguém mais usa."]
+  }
+};
+
+const $ = id => document.getElementById(id);
+let idx = 0, answers = [];
+
+function show(sec){
+  ["start","quiz","result"].forEach(s => $(s).classList.toggle("hide", s !== sec));
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+function render(){
+  const item = QUESTIONS[idx];
+  $("count").textContent = `Pergunta ${idx+1} de ${QUESTIONS.length}`;
+  $("fill").style.width = ((idx)/QUESTIONS.length*100) + "%";
+  $("question").textContent = item.q;
+  $("options").innerHTML = "";
+  item.a.forEach((opt, i) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.textContent = opt[0];
+    b.onclick = () => choose(i, opt[1]);
+    $("options").appendChild(b);
+  });
+  $("back").style.visibility = idx === 0 ? "hidden" : "visible";
+  $("options").firstChild.focus();
+}
+
+function choose(optionIndex, points){
+  answers[idx] = {optionIndex, points};
+  if (idx < QUESTIONS.length - 1){ idx++; render(); }
+  else finish();
+}
+
+$("begin").onclick = () => { show("quiz"); render(); };
+$("back").onclick = () => { if(idx>0){ idx--; render(); } };
+$("again").onclick = () => { idx = 0; answers = []; show("start"); };
+
+function finish(){
+  const score = answers.reduce((s,a) => s + a.points, 0);
+  let key;
+  if (score <= 8){
+    const sistemaQ = QUESTIONS.findIndex(q => q.key === "sistema");
+    key = answers[sistemaQ].optionIndex === 1 ? "abandono" : "ausencia";
+  } else if (score <= 15) key = 2;
+  else if (score <= 22) key = 3;
+  else key = 4;
+
+  const lv = LEVELS[key];
+
+  $("levelName").textContent = lv.name;
+  $("levelTier").textContent = `${score} de 30 pontos`;
+  $("levelRead").innerHTML = lv.read.map(p => `<p>${p}</p>`).join("");
+  $("levelActs").innerHTML = lv.acts.map(a => `<li>${a}</li>`).join("");
+
+  [...$("scale").children].forEach((seg,i) => {
+    seg.className = i+1 < lv.tier ? "on" : (i+1 === lv.tier ? "here" : "");
+  });
+
+  const msg = `Olá! Fiz o autodiagnóstico no site e o resultado foi "${lv.name}", com ${score} de 30 pontos. Gostaria de entender melhor.`;
+
+  const dm = $("dm");
+  dm.href = `https://ig.me/m/${INSTAGRAM}`;
+  dm.onclick = () => {
+    // Cópia síncrona primeiro, para não depender de promise antes da navegação.
+    try{
+      const t = document.createElement("textarea");
+      t.value = msg;
+      t.setAttribute("readonly","");
+      t.style.position = "fixed";
+      t.style.opacity = "0";
+      document.body.appendChild(t);
+      t.select();
+      document.execCommand("copy");
+      t.remove();
+    }catch(e){ /* segue mesmo sem copiar */ }
+    if (navigator.clipboard) navigator.clipboard.writeText(msg).catch(()=>{});
+    const hint = $("hint");
+    hint.classList.add("copied");
+    hint.textContent = "Resultado copiado. Cole na conversa que abriu.";
+    return true; // deixa o link navegar normalmente
+  };
+
+  $("mail").textContent = EMAIL;
+  $("mail").href = `mailto:${EMAIL}?subject=${encodeURIComponent("Resultado do autodiagnóstico: " + lv.name)}&body=${encodeURIComponent(msg)}`;
+
+  $("fill").style.width = "100%";
+  show("result");
+}
+</script>
+</body>
+</html>
