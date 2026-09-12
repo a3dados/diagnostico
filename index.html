@@ -232,6 +232,48 @@
   .cta .alt a{background:none;color:var(--navy);padding:0;font-weight:500;text-decoration:underline}
 
   .foot{margin-top:40px;font-size:14px;color:var(--muted)}
+
+  /* ---------- formulário opcional ---------- */
+  .form{margin-top:40px;padding-top:30px;border-top:1px solid var(--mist)}
+  .form .sub{margin:0 0 22px;max-width:54ch;color:var(--muted)}
+  .fields{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+  @media (max-width:560px){ .fields{grid-template-columns:1fr} }
+  .fields label{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--muted)}
+  .fields input{
+    font:inherit;
+    font-size:16px;
+    color:var(--ink);
+    padding:12px 14px;
+    border:1px solid var(--mist);
+    border-radius:4px;
+    background:var(--white);
+  }
+  .fields input:focus{border-color:var(--teal)}
+  .opt-tag{color:var(--teal)}
+  .consent{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    font-size:15px;
+    color:var(--muted);
+    max-width:58ch;
+    margin-bottom:20px;
+    line-height:1.4;
+  }
+  .consent input{margin-top:4px;width:17px;height:17px;accent-color:var(--teal);flex:none}
+  .send{
+    background:var(--navy);
+    color:var(--white);
+    border:0;
+    border-radius:4px;
+    padding:14px 28px;
+    font-weight:600;
+  }
+  .send:hover{background:#0a4079}
+  .send:disabled{opacity:.5;cursor:default}
+  .status{margin:14px 0 0;font-size:15px;color:var(--muted);min-height:1.4em}
+  .status.ok{color:var(--teal)}
+  .status.err{color:#b23b3b}
   .hide{display:none}
 
   @media (prefers-reduced-motion:reduce){
@@ -252,7 +294,7 @@
     <h1>Quando você precisa de um número, o que você faz?</h1>
     <p class="lead">A resposta a essa pergunta diz mais sobre a sua empresa do que qualquer sistema que ela tenha comprado.</p>
     <p>São dez perguntas sobre o dia a dia, sem termo técnico. No fim você recebe o nível de maturidade da sua empresa e os três primeiros passos para sair dele.</p>
-    <div class="meta">Leva cerca de três minutos. Nada é enviado para ninguém: o resultado aparece na tela e você decide o que fazer com ele.</div>
+    <div class="meta">Leva cerca de três minutos. As respostas são registradas de forma anônima, para entendermos como as empresas da região lidam com dados. Você só se identifica se quiser, no fim.</div>
     <button class="go" id="begin">Começar o diagnóstico</button>
   </section>
 
@@ -283,6 +325,23 @@
       <span class="alt" id="hint">Ao abrir, o seu resultado vai estar copiado. É só colar na conversa. Prefere e-mail? Escreva para <a id="mail" href="#">a3dadosmkt@gmail.com</a>.</span>
     </div>
 
+    <div class="form" id="form">
+      <h2>Receber a leitura completa do seu resultado</h2>
+      <p class="sub">Preencha e a gente retorna com um comentário escrito sobre o seu nível e o que costuma destravar primeiro em empresas parecidas. Sem custo e sem compromisso.</p>
+
+      <div class="fields">
+        <label>Nome<input type="text" id="f_nome" autocomplete="name"></label>
+        <label>Empresa<input type="text" id="f_empresa" autocomplete="organization"></label>
+        <label>E-mail<input type="email" id="f_email" autocomplete="email"></label>
+        <label>WhatsApp <span class="opt-tag">opcional</span><input type="tel" id="f_fone" autocomplete="tel"></label>
+      </div>
+
+      <label class="consent"><input type="checkbox" id="f_ok"> Autorizo a A³ Dados a guardar esses dados e entrar em contato comigo sobre este resultado.</label>
+
+      <button class="send" id="send">Enviar</button>
+      <p class="status" id="status"></p>
+    </div>
+
     <p class="foot"><button class="ghost" id="again">Refazer o diagnóstico</button></p>
   </section>
 
@@ -292,6 +351,24 @@
 /* ====== TROCAR ANTES DE PUBLICAR ====== */
 const INSTAGRAM = "a3dados";                   // o @ do perfil, sem arroba
 const EMAIL     = "a3dadosmkt@gmail.com";
+const ENDPOINT  = "https://script.google.com/macros/s/AKfycbywQaLWOxWltRxWNYnOYRpxUYDRmXh4iy3BiZfOCRqcetowtZHfgl5Ky4Vkk3d_2cNp/exec";
+/* Enquanto ENDPOINT estiver vazio, nada é enviado e a página funciona normalmente.
+   Abrir a página com ?teste=1 no fim do endereço marca a linha como TESTE na planilha. */
+
+const MODO_TESTE = new URLSearchParams(location.search).get("teste") === "1";
+const SESSAO = Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4);
+
+function enviar(payload){
+  if(!ENDPOINT) return Promise.reject(new Error("endpoint não configurado"));
+  return fetch(ENDPOINT, {
+    method: "POST",
+    body: JSON.stringify(Object.assign({
+      id: SESSAO,
+      teste: MODO_TESTE,
+      origem: document.referrer || "direto"
+    }, payload))
+  }).then(r => r.json());
+}
 /* ====================================== */
 
 const QUESTIONS = [
@@ -489,6 +566,67 @@ function finish(){
 
   $("fill").style.width = "100%";
   show("result");
+
+  // Envio anônimo do resultado.
+  enviar({
+    tipo: "resultado",
+    nivel: lv.name,
+    pontuacao: score,
+    respostas: answers.map((a, i) => QUESTIONS[i].a[a.optionIndex][0])
+  }).catch(() => {});
+
+  // Formulário de contato, opcional.
+  const st = $("status");
+  const btn = $("send");
+  st.textContent = ""; st.className = "status";
+  btn.disabled = false;
+  btn.textContent = "Enviar";
+
+  btn.onclick = () => {
+    const nome = $("f_nome").value.trim();
+    const email = $("f_email").value.trim();
+
+    if(!nome || !email){
+      st.textContent = "Preencha ao menos o nome e o e-mail.";
+      st.className = "status err";
+      return;
+    }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+      st.textContent = "Confira o e-mail: parece estar incompleto.";
+      st.className = "status err";
+      return;
+    }
+    if(!$("f_ok").checked){
+      st.textContent = "Marque a autorização para podermos entrar em contato.";
+      st.className = "status err";
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Enviando";
+    st.textContent = ""; st.className = "status";
+
+    enviar({
+      tipo: "contato",
+      nome: nome,
+      empresa: $("f_empresa").value.trim(),
+      email: email,
+      telefone: $("f_fone").value.trim(),
+      consentimento: true,
+      nivel: lv.name,
+      pontuacao: score
+    }).then(r => {
+      if(r && r.ok === false) throw new Error(r.erro || "falha");
+      $("form").innerHTML =
+        '<h2>Recebemos o seu contato</h2>' +
+        '<p class="sub">A A³ retorna em até dois dias úteis. Se quiser adiantar a conversa, o botão do Instagram acima abre a nossa caixa de mensagens.</p>';
+    }).catch(() => {
+      btn.disabled = false;
+      btn.textContent = "Enviar";
+      st.textContent = "Não conseguimos enviar agora. Tente de novo, ou escreva para " + EMAIL + ".";
+      st.className = "status err";
+    });
+  };
 }
 </script>
 </body>
