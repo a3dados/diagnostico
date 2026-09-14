@@ -1,5 +1,5 @@
 <!--
-  A³ Dados — Autodiagnóstico de Maturidade de Dados
+  Dak Dados — Autodiagnóstico de Maturidade de Dados
   Arquivo único. Pode ser hospedado em qualquer lugar (domínio próprio, GitHub Pages, Vercel).
 
   ANTES DE PUBLICAR, trocar em dois lugares no fim do arquivo:
@@ -11,7 +11,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Autodiagnóstico de Maturidade de Dados · A³ Dados</title>
+<title>Autodiagnóstico de Maturidade de Dados · Dak Dados</title>
 <meta name="description" content="Dez perguntas para descobrir em que nível a sua empresa está no uso de dados, e o que fazer a seguir.">
 
 <!-- Prévia do link em WhatsApp, LinkedIn, Instagram e Facebook.
@@ -23,9 +23,9 @@
 <meta property="og:image" content="https://a3dados.github.io/diagnostico/a3dados-og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A³ Dados — autodiagnóstico de maturidade de dados">
+<meta property="og:image:alt" content="Dak Dados — autodiagnóstico de maturidade de dados">
 <meta property="og:locale" content="pt_BR">
-<meta property="og:site_name" content="A³ Dados">
+<meta property="og:site_name" content="Dak Dados">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -286,7 +286,7 @@
 <div class="wrap">
 
   <div class="brand">
-    <b>A³ Dados</b>
+    <b>Dak Dados</b>
     <span>Autodiagnóstico de maturidade</span>
   </div>
 
@@ -337,7 +337,7 @@
         <label><span class="lbl">WhatsApp <span class="opt-tag">opcional</span></span><input type="tel" id="f_fone" autocomplete="tel"></label>
       </div>
 
-      <label class="consent"><input type="checkbox" id="f_ok"> Autorizo a A³ Dados a guardar esses dados e entrar em contato comigo sobre este resultado.</label>
+      <label class="consent"><input type="checkbox" id="f_ok"> Autorizo a Dak Dados a guardar esses dados e entrar em contato comigo sobre este resultado.</label>
 
       <button class="send" id="send">Enviar</button>
       <p class="status" id="status"></p>
@@ -350,7 +350,7 @@
 
 <script>
 /* ====== TROCAR ANTES DE PUBLICAR ====== */
-const INSTAGRAM = "a3dados";                   // o @ do perfil, sem arroba
+const INSTAGRAM = "dakdados";                   // o @ do perfil, sem arroba
 const EMAIL     = "a3dadosmkt@gmail.com";
 const ENDPOINT  = "https://script.google.com/macros/s/AKfycbywQaLWOxWltRxWNYnOYRpxUYDRmXh4iy3BiZfOCRqcetowtZHfgl5Ky4Vkk3d_2cNp/exec";
 /* Enquanto ENDPOINT estiver vazio, nada é enviado e a página funciona normalmente.
@@ -620,7 +620,7 @@ function finish(){
       if(r && r.ok === false) throw new Error(r.erro || "falha");
       $("form").innerHTML =
         '<h2>Recebemos o seu contato</h2>' +
-        '<p class="sub">A A³ retorna em até dois dias úteis. Se quiser adiantar a conversa, o botão do Instagram acima abre a nossa caixa de mensagens.</p>';
+        '<p class="sub">A Dak retorna em até dois dias úteis. Se quiser adiantar a conversa, o botão do Instagram acima abre a nossa caixa de mensagens.</p>';
     }).catch(() => {
       btn.disabled = false;
       btn.textContent = "Enviar";
